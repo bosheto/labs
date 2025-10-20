@@ -25,6 +25,5 @@ spec:
             name: data
       volumes:
         - name: data
-          persistentVolumeClaim:
-            claimName: mealie-nfs
-
+          emptyDir:
+            sizeLimit: 500Mi

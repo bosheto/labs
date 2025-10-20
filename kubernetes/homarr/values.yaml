@@ -1,0 +1,5 @@
+persistence:
+  homarrDatabase:
+    enabled: true
+    storageClassName: nfs-csi
+    size: "10Gi"

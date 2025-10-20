@@ -1,0 +1,15 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: smb-csi
+provisioner: smb.csi.k8s.io
+parameters:
+  source: "//10.0.0.58/kube"  # Define Samba share
+  csi.storage.k8s.io/node-stage-secret-name: "smb-secret" # Define Samba credential secret
+  csi.storage.k8s.io/node-stage-secret-namespace: "default" # Define Samba credential secret namespace
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - vers=3.0  # Define Samba version
+reclaimPolicy: Delete
+
