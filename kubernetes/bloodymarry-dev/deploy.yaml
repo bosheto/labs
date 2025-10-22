@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bl-database
+  name: bl-database
+  namespace: bl-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bl-database
+  template:
+    metadata:
+      labels:
+        app: bl-database
+    spec:
+      containers:
+      - image: mariadb
+        name: mariadb
+        ports:
+          - containerPort: 3360
+        volumeMounts:
+          - mountPath: "/var/lib/mysql"
+            name: data
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: C!sco136
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: bl-db-nfs

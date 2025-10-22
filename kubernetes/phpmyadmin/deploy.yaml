@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: phpmyadmin
+  name: phpmyadmin-deploy
+  namespace: db-utils
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpmyadmin
+  template:
+    metadata:
+      labels:
+        app: phpmyadmin
+    spec:
+      containers:
+      - image: phpmyadmin
+        name: phpmyadmin
+        ports:
+          - containerPort: 80
+        env:
+        - name: PMA_ARBITRARY
+          value: '1'
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: phpmyadmin
+  name: phpmyadmin-service
+  namespace: db-utils
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: phpmyadmin
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: phpmyadmin-ingress
+  namespace: db-utils
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: phpadmin.lab
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: phpmyadmin-service
+            port:
+              number: 80
+---
+
